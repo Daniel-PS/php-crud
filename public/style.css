@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,700;1,600&display=swap');
 
+/* //////////////// ESTILO BASE //////////////// */
+
 body {
     font-family: 'Cormorant', serif;
     background-image: url('images/background_pattern.png');
@@ -26,11 +28,18 @@ a {
     color: black;
 }
 
+
+/* //////////////// ESTILO DO INDEX //////////////// */
+
 .center {
     background-color: whitesmoke;
     margin: -1% 9% 0% 9%;
     font-family: 'Cormorant', serif;
     box-shadow: black 0px 0px 11px -6px;
+}
+
+.sub-center {
+    padding: 4%;
 }
 
 .table-rows {
@@ -44,15 +53,59 @@ a {
     text-align: center;
 }
 
-.sub-center {
-    padding: 4%;
-}
-
 .portrait {
     height: 55%;
     padding-right: 40px;
+    transition: .2s all;
+}
+
+.portrait:hover{
+    height: 58%;
+    filter: brightness(0.4);
+    
 }
 
 .info {
     font-size: 15pt;
+}
+
+
+/* //////////////// ESTILO DO CREATE //////////////// */
+
+.creation-center {
+    background-color: whitesmoke;
+    margin: 6% 1% 1% 1%;
+    font-family: 'Cormorant', serif;
+    box-shadow: black 0px 0px 11px -6px;
+}
+
+.sub-creation-center {
+    padding: 9%;
+}
+
+.title {
+    position: absolute;
+    background-color: white;
+    font-size: 23pt;
+    font-weight: bold;
+    padding: 0% 4% 0% 3%;
+    margin: 3% 0% 0% 11%;
+    box-shadow: black 0px 0px 3px -2px;
+    text-align: center;
+    border-radius: 40px 40px 40px 40px;
+}
+
+.form {
+    display: flex;
+}
+
+.form-inputs {
+    display: inline-grid;
+}
+
+.form-portrait {
+    display: block;
+    width: 50%;
+    height: 30%;
+    border-radius: 50%
 }
