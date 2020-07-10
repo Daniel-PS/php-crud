@@ -1,9 +1,58 @@
-html {
-    border: 0;
-    size: 0;
-}
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,700;1,600&display=swap');
 
 body {
-    background-image: url('images/2oks6fc85uw1zpyj3ii9pleahgtx5cungl1y4yt.jpg');
-    background-size: 200px;
+    font-family: 'Cormorant', serif;
+    background-image: url('images/background_pattern.png');
+}
+
+.top-center {
+    background-image: url('images/site_cover.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-bottom: 34%;
+}
+
+.links-line {
+    background-color: white;
+    padding: 3%;
+    text-align: center;
+    text-decoration: none;
+    font-size: 24pt;
+    box-shadow: black 0px 0px 11px -6px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.center {
+    background-color: whitesmoke;
+    margin: -1% 9% 0% 9%;
+    font-family: 'Cormorant', serif;
+    box-shadow: black 0px 0px 11px -6px;
+}
+
+.table-rows {
+    font-weight: bold;
+    font-size: 17pt;
+    text-align: center;
+}
+
+.table-rows-values {
+    font-size: 17pt;
+    text-align: center;
+}
+
+.sub-center {
+    padding: 4%;
+}
+
+.portrait {
+    height: 55%;
+    padding-right: 40px;
+}
+
+.info {
+    font-size: 15pt;
 }
