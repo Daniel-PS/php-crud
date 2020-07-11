@@ -123,7 +123,8 @@ class Saint
         }
         else {
             $birthdayDate = DateTime::createFromFormat('d/m/Y', $this->birthday);
-            
+            $this->birthday = $birthdayDate->format('Y-m-d');
+
             if ($birthdayDate === false) {
                 $this->errors['birthday'] = 'Data inválida';
             }

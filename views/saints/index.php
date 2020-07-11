@@ -3,8 +3,8 @@
 ?>
 
 <?php if (isset($message)): ?>
-    <div class="message">
-            <p class="message-text"><?= $message ?></p>
+    <div id="hideMe" class="message">
+        <p class="message-text"><?= $message ?></p>
     </div>
 <?php endif; ?>
 

@@ -56,6 +56,21 @@ a {
     box-shadow: black 0px 0px 3px -1px;
 }
 
+#hideMe {
+    -webkit-animation: cssAnimation 5s forwards; 
+    animation: cssAnimation 5s forwards;
+}
+@keyframes cssAnimation {
+    0%   {opacity: 1;}
+    90%  {opacity: 1;}
+    100% {opacity: 0;}
+}
+@-webkit-keyframes cssAnimation {
+    0%   {opacity: 1;}
+    90%  {opacity: 1;}
+    100% {opacity: 0;}
+}
+
 .table-rows {
     font-weight: bold;
     font-size: 17pt;
@@ -158,8 +173,10 @@ input[type="file"] {
     height: 400px;
     background-position: center;
     overflow: hidden;
+    box-shadow: black 0px 0px 7px -1px;
 }
 .portrait-preview-img {
+    width: 400px;
     height: 400px;
 }
 

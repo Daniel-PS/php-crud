@@ -15,8 +15,7 @@
     <div class="line">
         <div class="links-line">
             <a href="<?= BASE_URL ?>/saints">List Saints |</a>
-            <a href="<?= BASE_URL ?>/saints/delete">Remove a Saint |</a>
             <a href="<?= BASE_URL ?>/saints/register">Add a Saint |</a>
-            <a href="<?= BASE_URL ?>/saints/edit?id=1">Update Saint |</a>
+            <a href="<?= BASE_URL ?>/saints/edit?id=1">Update Saint</a>
         </div>
     </div>

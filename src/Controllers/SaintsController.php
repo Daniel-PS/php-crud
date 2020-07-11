@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Connection;
 use App\Saint;
 use App\Session;
 
@@ -15,17 +16,21 @@ class SaintsController
 
         showView('saints/index.php', [
             'saints' => $saints,
-            'message' => $message
+            'message' => $message,
         ]);
     }
 
     public function create()
     {
         $errors = Session::get('errors');
+        $old_input = Session::get('old_input') ?? [];
+
         Session::clear('errors');
+        Session::clear('old_input');
 
         showView('saints/create.php', [
             'errors' => $errors,
+            'old_input' => $old_input
         ]);
     }
 
@@ -44,6 +49,7 @@ class SaintsController
             $errors = $saint->getErrors();
 
             Session::set('errors', $errors);
+            Session::set('old_input', $_POST);
 
             redirect('saints/register');
             return;
@@ -59,12 +65,17 @@ class SaintsController
     {
         $id = $_GET['id'];
         $saint = Saint::getAllFromSaintId($id);
+
         $errors = Session::get('errors');
+        $old_input = Session::get('old_input');
+
         Session::clear('errors');
+        Session::clear('old_input');
 
         showView('saints/edit.php', [
             'saint' => $saint,
             'errors' => $errors,
+            'old_input' => $old_input
         ]);
         
     }
@@ -85,6 +96,7 @@ class SaintsController
             $errors = $updatedSaint->getErrors();
 
             Session::set('errors', $errors);
+            Session::set('old_input', $_POST);
 
             redirect('saints/edit?id=' . $id);
             return;
@@ -99,6 +111,20 @@ class SaintsController
     public function delete()
     {
         $id = $_GET['id'];
+
+        $pdo = Connection::make();
+        $stmt = $pdo->prepare('SELECT photo FROM saints WHERE id=?');
+        $stmt->execute([$id]);
+        $photo = $stmt->fetch();
+
+        $stmt = $pdo->prepare('DELETE FROM saints WHERE id=?');
+        $result = $stmt->execute([$id]);
+
+        if ($result) {
+            deletePhoto($photo);
+        }
         
+        Session::set('message', 'Excluído com sucesso.');
+        redirect('saints');
     }
 }

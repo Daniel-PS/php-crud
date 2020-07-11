@@ -25,7 +25,7 @@ showView('partials/header.php');
 
                 <div class="form-inputs">
                     <label class="input-label">Name</label>
-                    <input class="input-field" class="input-field" type="text" name="name" placeholder="Type Saint's name">
+                    <input value="" class="input-field" class="input-field" type="text" name="name" placeholder="Type Saint's name">
                     <?php if (isset($errors['name'])): ?>
                         <p class="errors">
                             <?= $errors['name']; ?>
