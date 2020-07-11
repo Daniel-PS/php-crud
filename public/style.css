@@ -23,6 +23,10 @@ body {
     box-shadow: black 0px 0px 11px -6px;
 }
 
+td {
+    padding: 0 0 0 40px;
+}
+
 a {
     text-decoration: none;
     color: black;
@@ -42,6 +46,16 @@ a {
     padding: 4%;
 }
 
+.message {
+    background-color: floralwhite;
+    padding: 1% 1% 1% 1%;
+    margin: -4% 0% 0% 5%;
+    position: absolute;
+    font-weight: bold;
+    font-size: 15pt;
+    box-shadow: black 0px 0px 3px -1px;
+}
+
 .table-rows {
     font-weight: bold;
     font-size: 17pt;
@@ -54,14 +68,14 @@ a {
 }
 
 .portrait {
-    height: 55%;
-    padding-right: 40px;
+    box-shadow: black 0px 0px 8px 0px;
+    height: 272px;
     transition: .2s all;
 }
 
 .portrait:hover{
-    height: 58%;
-    filter: brightness(0.4);
+    height: 280px;
+    filter: brightness(0.7);
     
 }
 
@@ -90,7 +104,7 @@ a {
     font-weight: bold;
     padding: 0% 4% 0% 3%;
     margin: 3% 0% 0% 11%;
-    box-shadow: black 0px 0px 3px -2px;
+    box-shadow: black -3px 3px 9px -4px;
     text-align: center;
     border-radius: 40px 40px 40px 40px;
 }
@@ -101,11 +115,128 @@ a {
 
 .form-inputs {
     display: inline-grid;
+    padding-left: 10%;
 }
 
 .form-portrait {
-    display: block;
-    width: 50%;
+    display: grid;
+    width: 45%;
     height: 30%;
-    border-radius: 50%
+}
+
+.camera-icon {
+    height: 29%;
+    margin: 36%;
+}
+
+input[type="file"] {
+    display: none;
+}
+.image-upload {
+    border: 1px solid #ccc;
+    padding: 5px 50px 5px 50px;
+    cursor: pointer;
+    margin: 22px 221px 0px 121px;
+    background-color: aliceblue;
+    box-shadow: black 0px 0px 3px -2px;
+    font-weight: bold;
+    font-size: 15pt;
+    cursor: pointer;
+}
+
+.image-upload:hover {
+    transition: .5s;
+    background-color: rgb(199, 228, 253);
+}
+
+.portrait-preview {
+    background-image: url(images/camera_icon.webp);
+    background-color: rgb(128, 208, 255);
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    width: 400px;
+    height: 400px;
+    background-position: center;
+    overflow: hidden;
+}
+.portrait-preview-img {
+    height: 400px;
+}
+
+.input-portrait-label {
+    cursor: auto;
+    font-weight: bold;
+    font-size: 21pt;
+    margin: 20px 0 20px 160px;
+}
+
+.errors {
+    color: red;
+    font-weight: bold;
+    margin-top: 1px;
+}
+
+.input-field {
+    border: none;
+    border-radius: 20px 21px 20px 20px;
+    box-shadow: black 0px 0px 5px -2px;
+    padding: 12px 144px 13px 45px;
+}
+
+.input-label {
+    cursor: auto;
+    font-weight: bold;
+    font-size: 21pt;
+    margin: 20px 0 20px 0;
+}
+
+.input-button {
+    cursor: pointer;
+    border: none;
+    background-color: aliceblue;
+    padding: 13px 44px 15px 33px;
+    margin: 50px 448px -63px -120px;
+    font-weight: bold;
+    font-size: 14pt;
+    box-shadow: black 0px 0px 3px -1px;
+}
+
+.input-button:hover {
+    transition: .5s;
+    background-color: rgb(199, 228, 253);
+}
+
+.edit-delete {
+    font-weight: bold;
+}
+
+.edit-delete:hover {
+    color: darksalmon;
+    transition: .2s;
+
+}
+
+
+/* //////////////// ESTILO DO EDIT //////////////// */
+
+.edit-center {
+    background-color: whitesmoke;
+    margin: 6% 1% 1% 1%;
+    font-family: 'Cormorant', serif;
+    box-shadow: black 0px 0px 11px -6px;
+}
+
+.sub-edit-center {
+    padding: 9%;
+}
+
+.portrait-edit {
+    height: 120px;
+    transition: .2s all;
+    border-radius: 50%;
+    box-shadow: black 0px 1px 7px -1px;
+}
+
+.portrait-edit:hover{
+    filter: brightness(0.7);
 }

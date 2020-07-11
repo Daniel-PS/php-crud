@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/saints/public/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="<?= BASE_URL ?>/js/main.js"></script>
     <title>Saints</title>
 </head>
 <body>
@@ -12,9 +14,9 @@
     
     <div class="line">
         <div class="links-line">
-            <a href="http://localhost/saints/public/saints">List Saints |</a>
-            <a href="">Remove a Saint |</a>
-            <a href="http://localhost/saints/public/saints/register">Add a Saint |</a>
-            <a href="">Update Saint |</a>
+            <a href="<?= BASE_URL ?>/saints">List Saints |</a>
+            <a href="<?= BASE_URL ?>/saints/delete">Remove a Saint |</a>
+            <a href="<?= BASE_URL ?>/saints/register">Add a Saint |</a>
+            <a href="<?= BASE_URL ?>/saints/edit?id=1">Update Saint |</a>
         </div>
     </div>

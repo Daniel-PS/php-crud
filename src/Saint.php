@@ -6,21 +6,54 @@ use DateTime;
 
 class Saint
 {
-    private $portrait;
+    private $photo;
     private $name;
     private $country;
     private $birthday;
     private $info;
     private $errors;
+    private $oldPhoto;
 
-    public function getPortrait()
+    public static function getAll()
     {
-        return $this->portrait;
+        $pdo = Connection::make();
+
+        $sql = "SELECT * FROM saints";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
-    public function setPortrait($portrait)
+    public static function getAllFromSaintId($id)
     {
-        $this->portrait = $portrait;
+        $pdo = Connection::make();
+
+        $stmt = $pdo->prepare('SELECT * FROM saints WHERE id=?');
+        $stmt->execute([$id]);
+        return $stmt->fetchAll();
+    }
+
+    public function setOldPhoto($oldPhoto)
+    {
+        $this->oldPhoto = $oldPhoto;
+    }
+
+    public function getOldPhoto($oldPhoto)
+    {
+        $pdo = Connection::make();
+        $stmt = $pdo->prepare('SELECT photo FROM saints WHERE id=?');
+        $stmt->execute([$oldPhoto]);
+        return $stmt->fetch();
+    }
+
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
     }
 
     public function getName()
@@ -71,29 +104,77 @@ class Saint
     public function hasValidData()
     {
         $this->errors = [];
-        $birthdayDate = DateTime::createFromFormat('d/m/Y', $this->birthday);
-
-        if ($birthdayDate === false) {
-            $this->errors['birthday'] = 'Data inválida';
-        } 
         
 
+        if(empty($this->photo)) {
+            $this->errors['photo'] = 'Preencha este campo.';
+        }
+
+        if(empty($this->name)) {
+            $this->errors['name'] = 'Preencha este campo.';
+        }
+
+        if(empty($this->country)) {
+            $this->errors['country'] = 'Preencha este campo.';
+        }
+
+        if(empty($this->birthday)) {
+            $this->errors['birthday'] = 'Preencha este campo.';
+        }
+        else {
+            $birthdayDate = DateTime::createFromFormat('d/m/Y', $this->birthday);
+            
+            if ($birthdayDate === false) {
+                $this->errors['birthday'] = 'Data inválida';
+            }
+        }
+
+        if(empty($this->info)) {
+            $this->errors['info'] = 'Preencha este campo';
+        }
         return empty($this->errors);
     }
 
     public function save()
     {
-        
-    }
+        $saint = [
+            $this->photo,
+            $this->name,
+            $this->country,
+            $this->birthday,
+            $this->info,
+        ];
 
-    public static function getAll()
-    {
         $pdo = Connection::make();
+        $stmt = $pdo->prepare('INSERT INTO saints (photo, name, country, birthday, info) VALUES (?, ?, ?, ?, ?)');
+        $result = $stmt->execute($saint);
 
-        $sql = "SELECT * FROM saints";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll();
+        if ($result) {
+            handleUploadedFile('photo');
+        }
+        return $result;
     }
 
+    public function saveUpdate($id)
+    {
+        $old_photo = $this->getOldPhoto($this->oldPhoto);
+        
+        $updatedSaint = [
+            $this->photo,
+            $this->name,
+            $this->country,
+            $this->birthday,
+            $this->info,
+            $id
+        ];
+
+        $pdo = Connection::make();
+        $stmt = $pdo->prepare('UPDATE saints SET photo=?, name=?, country=?, birthday=?, info=? WHERE id=?');
+        $result = $stmt->execute($updatedSaint);
+
+        if ($result) {
+            handleUploadedFile('edited_photo', $old_photo);
+        }
+        return $result;
+    }
 }

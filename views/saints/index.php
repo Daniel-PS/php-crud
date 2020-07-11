@@ -1,6 +1,13 @@
 <?php 
     showView('partials/header.php');
 ?>
+
+<?php if (isset($message)): ?>
+    <div class="message">
+            <p class="message-text"><?= $message ?></p>
+    </div>
+<?php endif; ?>
+
     <div class="center">
         <div class="sub-center">
             <table>
@@ -9,27 +16,30 @@
                     <td>Portrait</td>
                     <td>Name</td>
                     <td>Nation</td>
-                    <td style="padding: 0 40px 0 40px;">Birthday</td>
+                    <td>Birthday</td>
                     <td>Information</td>
                 </tr>
+                <br>
                 <?php foreach ($saints as $saint): ?>
                     <tr class="table-rows-values">
                         <td>
                             <a href="">
-                                <img class="portrait" src="https://www.a12.com/source/files/originals/santa_teresinha_reproducao.jpg" alt="">
+                                <img class="portrait-edit" src="<?= BASE_URL ?>/images/user_uploads/<?= $saint['photo'] ?>" alt="">
                             </a>
                         </td>
-                        <td><?= $saint['name'] ?></td>
-                        <td><?= $saint['country'] ?></td>
-                        <td style="padding: 0 20px 0 20px;"><?= $saint['birthday'] ?></td>
+                        <td><?= h($saint['name']) ?></td>
+                        <td><?= h($saint['country']) ?></td>
+                        <td><?= h($saint['birthday']) ?></td>
                         <td>
                             <hr>
-                                <div class="info">
-                                    <p><?= $saint['info'] ?>
+                            <div class="info">
+                                <p>
+                                    <?= h($saint['info']) ?>
                                 </p>
                             </div>
-                            <hr>
                         </td>
+                        <td><a class="edit-delete" href="<?= BASE_URL . '/saints/edit?id=' . $saint['id'] ?>">Edit</a> <hr>
+                        <a class="edit-delete" href="<?= BASE_URL . '/saints/delete?id=' . $saint['id'] ?>">Delete</a></td>
                     </tr>
                 <?php endforeach; ?>
             </table>

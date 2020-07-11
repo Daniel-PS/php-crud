@@ -4,7 +4,8 @@ require_once '../src/functions.php';
 require_once '../src/autoload.php';
 
 define('VIEWS_FOLDER_PATH', realpath('../views'));
-
+define('PUBLIC_UPLOADS_FOLDER_PATH', realpath('./images/user_uploads'));
+define('BASE_URL', '/saints/public');
 
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $url = '/' . $url;
@@ -16,8 +17,8 @@ $routes = [
     'GET|/saints/register' => 'App\Controllers\SaintsController@create',
     'POST|/saints/register' => 'App\Controllers\SaintsController@store',
     
-    'GET|/users/edit' => 'App\Controllers\SaintsController@edit',
-    'POST|/users/edit' => 'App\Controllers\SaintsController@update',
+    'GET|/saints/edit' => 'App\Controllers\SaintsController@edit',
+    'POST|/saints/edit' => 'App\Controllers\SaintsController@update',
 
     'GET|/saints/delete' => 'App\Controllers\SaintsController@delete',
 ];
