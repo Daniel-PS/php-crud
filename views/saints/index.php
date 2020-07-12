@@ -29,7 +29,7 @@
                         </td>
                         <td><?= h($saint['name']) ?></td>
                         <td><?= h($saint['country']) ?></td>
-                        <td><?= h($saint['birthday']) ?></td>
+                        <td><?= h(dateFormat($saint['birthday'])) ?></td>
                         <td>
                             <hr>
                             <div class="info">

@@ -11,6 +11,9 @@ $url = isset($_GET['url']) ? $_GET['url'] : '';
 $url = '/' . $url;
 
 $routes = [
+    'GET|/saints/login' => 'App\Controllers\AuthController@login',
+    'POST|/saints/login' => 'App\Controllers\AuthController@doLogin',
+
     'GET|/saints' => 'App\Controllers\SaintsController@index',
     'GET|/saints/show' => 'App\Controllers\SaintsController@show',
 

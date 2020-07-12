@@ -41,7 +41,7 @@ showView('partials/header.php');
                     <?php endif; ?>
 
                     <label class="input-label">Birthday</label>
-                    <input class="input-field" type="text" name="birthday" placeholder="Birthday">
+                    <input data-mask="00/00/0000" class="input-field" type="text" name="birthday" placeholder="Birthday">
                     <?php if (isset($errors['birthday'])): ?>
                         <p class="errors">
                             <?= $errors['birthday']; ?>
@@ -61,6 +61,5 @@ showView('partials/header.php');
             </form>
         </div>
     </div>
-
 </body>
 </html>

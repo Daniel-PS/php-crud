@@ -12,7 +12,6 @@ class Saint
     private $birthday;
     private $info;
     private $errors;
-    private $oldPhoto;
 
     public static function getAll()
     {
@@ -24,16 +23,16 @@ class Saint
         return $stmt->fetchAll();
     }
 
-    public static function getAllFromSaintId($id)
+    public static function getById($id) : array
     {
         $pdo = Connection::make();
 
         $stmt = $pdo->prepare('SELECT * FROM saints WHERE id=?');
         $stmt->execute([$id]);
-        return $stmt->fetchAll();
+        return $stmt->fetch();
     }
 
-    public function setOldPhoto($oldPhoto)
+    /* public function setOldPhoto($oldPhoto)
     {
         $this->oldPhoto = $oldPhoto;
     }
@@ -44,7 +43,7 @@ class Saint
         $stmt = $pdo->prepare('SELECT photo FROM saints WHERE id=?');
         $stmt->execute([$oldPhoto]);
         return $stmt->fetch();
-    }
+    } */
 
     public function getPhoto()
     {
@@ -158,7 +157,10 @@ class Saint
 
     public function saveUpdate($id)
     {
-        $old_photo = $this->getOldPhoto($this->oldPhoto);
+        // $old_photo = $this->getOldPhoto($this->oldPhoto);
+        $oldData = Saint::getById($id);
+
+        $old_photo = $oldData['photo'];
         
         $updatedSaint = [
             $this->photo,
@@ -177,5 +179,20 @@ class Saint
             handleUploadedFile('edited_photo', $old_photo);
         }
         return $result;
+    }
+
+    public static function delete($id)
+    {
+        $pdo = Connection::make();
+        $stmt = $pdo->prepare('SELECT photo FROM saints WHERE id=?');
+        $stmt->execute([$id]);
+        $photo = $stmt->fetch();
+
+        $stmt = $pdo->prepare('DELETE FROM saints WHERE id=?');
+        $result = $stmt->execute([$id]);
+
+        if ($result) {
+            deletePhoto($photo);
+        }
     }
 }

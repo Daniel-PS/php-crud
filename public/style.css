@@ -7,6 +7,13 @@ body {
     background-image: url('images/background_pattern.png');
 }
 
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
 .top-center {
     background-image: url('images/site_cover.jpg');
     background-repeat: no-repeat;
@@ -23,6 +30,19 @@ body {
     box-shadow: black 0px 0px 11px -6px;
 }
 
+.links-login {
+    font-size: 15pt;
+    font-weight: bold;
+    margin-left: 85%;
+    margin-bottom: 0%;
+    margin-top: -2%;
+}
+
+.login-register:hover {
+    color: rgb(247, 120, 77);
+    transition: .2s;
+}
+
 td {
     padding: 0 0 0 40px;
 }
@@ -31,7 +51,65 @@ a {
     text-decoration: none;
     color: black;
 }
+/* //////////////// ESTILO DO LOGIN //////////////// */
 
+.login-center {
+    background-color: whitesmoke;
+    margin: 6% 6% 6% 6%;
+    font-family: 'Cormorant', serif;
+    box-shadow: black 0px 0px 11px -6px;
+}
+
+.background-login {
+    position: absolute;
+    margin-top: -315px;
+    margin-left: 0px;
+}
+
+.login-sub-center {
+    padding: 5%;
+}
+
+.phrase {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 21pt;
+    margin-left: 30%;
+}
+
+.login {
+    display: inline-grid;
+    margin: 4% 0% 4% 32%;
+}
+
+.email-password {
+    margin-bottom: 70px;
+    display: inline-grid;
+
+}
+
+.password-email-label {
+    cursor: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20pt;
+}
+
+.login-button {
+    cursor: pointer;
+    border: none;
+    background-color: aliceblue;
+    font-weight: bold;
+    font-size: 14pt;
+    padding: 3% 7% 3% 7%;
+    box-shadow: black 0px 0px 3px -1px;
+    margin: 0% 0% 0% 34%;
+}
+
+.login-button:hover {
+    transition: .5s;
+    background-color: rgb(199, 228, 253);
+}
 
 /* //////////////// ESTILO DO INDEX //////////////// */
 
@@ -197,10 +275,15 @@ input[type="file"] {
     border: none;
     border-radius: 20px 21px 20px 20px;
     box-shadow: black 0px 0px 5px -2px;
-    padding: 12px 144px 13px 45px;
+    padding: 12px 97px 13px 97px;
+}
+
+.input-field::placeholder {
+    text-align: center;
 }
 
 .input-label {
+    text-align: center;
     cursor: auto;
     font-weight: bold;
     font-size: 21pt;

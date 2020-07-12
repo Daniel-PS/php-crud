@@ -64,7 +64,7 @@ class SaintsController
     public function edit()
     {
         $id = $_GET['id'];
-        $saint = Saint::getAllFromSaintId($id);
+        $saint = Saint::getById($id);
 
         $errors = Session::get('errors');
         $old_input = Session::get('old_input');
@@ -90,7 +90,7 @@ class SaintsController
         $updatedSaint->setCountry($_POST['edited_country'] ?? '');
         $updatedSaint->setBirthday($_POST['edited_birthday'] ?? '');
         $updatedSaint->setInfo($_POST['edited_info'] ?? '');
-        $updatedSaint->setOldPhoto($id);
+        // $updatedSaint->setOldPhoto($id);
 
         if (! $updatedSaint->hasValidData()) {
             $errors = $updatedSaint->getErrors();
@@ -111,18 +111,7 @@ class SaintsController
     public function delete()
     {
         $id = $_GET['id'];
-
-        $pdo = Connection::make();
-        $stmt = $pdo->prepare('SELECT photo FROM saints WHERE id=?');
-        $stmt->execute([$id]);
-        $photo = $stmt->fetch();
-
-        $stmt = $pdo->prepare('DELETE FROM saints WHERE id=?');
-        $result = $stmt->execute([$id]);
-
-        if ($result) {
-            deletePhoto($photo);
-        }
+        Saint::delete($id);
         
         Session::set('message', 'Excluído com sucesso.');
         redirect('saints');
