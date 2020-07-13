@@ -23,30 +23,31 @@
                 <?php foreach ($saints as $saint): ?>
                     <tr class="table-rows-values">
                         <td>
-                        <div class="tooltip">
-                            <span class="tooltiptext">Public</span>
-                        </div>
-                        <a href="">
-                            <img class="portrait-edit" src="<?= BASE_URL ?>/images/user_uploads/<?= $saint['photo'] ?>" alt="">
-                        </a>
+                            <?php if ($saint['status'] == 'public') : ?>
+                                <div class="tooltip">
+                                    <span class="tooltiptext">Público</span>
+                                </div>
+                            <?php else : ?>
+                                <div class="tooltip-private">
+                                    <span class="tooltiptext">Private</span>
+                                </div>
+                            <?php endif; ?>
+                            <a href="">
+                                <img class="portrait-edit" src="<?= BASE_URL . '/images/user_uploads/' . $saint['photo'] ?>" alt="">
+                            </a>
                         </td>
-                        <td>
-                            <?= h($saint['name']) ?>
-                        <?php if ($user_id == $saint['user_id']) : ?>
-                            <p class="poster_name"><?= "• $user_name" ?></p>
-                        <?php endif; ?>
-                        </td>
+                        <td><?= h($saint['name']) ?></td>
                         <td><?= h($saint['country']) ?></td>
                         <td><?= h(dateFormat($saint['birthday'])) ?></td>
                         <td>
-                        <hr>
-                        <div class="info">
-                            <p>
-                                <?= h($saint['info']) ?>
-                            </p>
-                        </div>
+                            <hr>
+                            <div class="info">
+                                <p>
+                                    <?= h($saint['info']) ?>
+                                </p>
+                            </div>
                         </td>
-                        <?php if ($user_id == $saint['user_id']) : ?>
+                        <?php if (App\Session::get('user')) : ?>
                             <td><a class="edit-delete" href="<?= BASE_URL . '/saints/edit?id=' . $saint['id'] ?>">Edit</a> <hr>
                             <a class="edit-delete" href="<?= BASE_URL . '/saints/delete?id=' . $saint['id'] ?>">Delete</a></td>
                         <?php endif; ?>

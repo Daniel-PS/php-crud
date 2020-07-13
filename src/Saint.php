@@ -6,48 +6,117 @@ use DateTime;
 
 class Saint
 {
+    private $id;
     private $photo;
     private $name;
     private $country;
     private $birthday;
     private $info;
     private $errors;
+    private $status;
+    private $user_id;
+    private $created_at;
 
-    public static function getAll()
+    private $old_photo;
+
+    public static function getAllPublic($public)
     {
         $pdo = Connection::make();
 
-        $sql = "SELECT * FROM saints";
+        $sql = "SELECT * FROM saints WHERE status=?";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([$public]);
         return $stmt->fetchAll();
     }
 
-    public static function getById($id) : array
+    public static function getByUser($user_id)
+    {
+        $pdo = Connection::make();
+        $sql = "SELECT * FROM saints WHERE user_id=?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$user_id]);
+        return $stmt->fetchAll();
+    }
+
+    public static function getById($id): ?Saint
     {
         $pdo = Connection::make();
 
         $stmt = $pdo->prepare('SELECT * FROM saints WHERE id=?');
         $stmt->execute([$id]);
-        return $stmt->fetch();
+
+        $saintData = $stmt->fetch();
+
+        if (empty($saintData)) {
+            return null;
+        }
+
+        $saint = new Saint();
+        $saint->setId($saintData['id']);
+        $saint->setUserId($saintData['user_id']);
+        $saint->setName($saintData['name']);
+        $saint->setPhoto($saintData['photo']);
+        $saint->setCountry($saintData['country']);
+        $saint->setBirthday($saintData['birthday']);
+        $saint->setInfo($saintData['info']);
+        $saint->setStatus($saintData['status']);
+        $saint->setCreatedAt($saintData['created_at']);
+
+        return $saint;
     }
 
-    /* public function setOldPhoto($oldPhoto)
-    {
-        $this->oldPhoto = $oldPhoto;
-    }
-
-    public function getOldPhoto($oldPhoto)
+    public static function getByUserId($id): array
     {
         $pdo = Connection::make();
-        $stmt = $pdo->prepare('SELECT photo FROM saints WHERE id=?');
-        $stmt->execute([$oldPhoto]);
+
+        $stmt = $pdo->prepare('SELECT * FROM saints WHERE user_id=?');
+        $stmt->execute([$id]);
         return $stmt->fetch();
-    } */
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+    }
+
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId($user_id)
+    {
+        $this->user_id = $user_id;
+    }
 
     public function getPhoto()
     {
         return $this->photo;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     public function setPhoto($photo)
@@ -100,10 +169,19 @@ class Saint
         return $this->errors;
     }
 
+    public function setOldPhoto($old_photo)
+    {
+        $this->old_photo = $old_photo;
+    }
+
     public function hasValidData()
     {
         $this->errors = [];
         
+        if ($this->status != 'private' &&  $this->status != 'public')
+        {
+            $this->errors['status'] = 'Status inválido.';
+        }
 
         if(empty($this->photo)) {
             $this->errors['photo'] = 'Preencha este campo.';
@@ -137,16 +215,20 @@ class Saint
 
     public function save()
     {
+        $user = Session::get('user');
+
         $saint = [
             $this->photo,
             $this->name,
             $this->country,
             $this->birthday,
             $this->info,
+            $user->getId(),
+            $this->status,
         ];
 
         $pdo = Connection::make();
-        $stmt = $pdo->prepare('INSERT INTO saints (photo, name, country, birthday, info) VALUES (?, ?, ?, ?, ?)');
+        $stmt = $pdo->prepare('INSERT INTO saints (photo, name, country, birthday, info, user_id, status) VALUES (?, ?, ?, ?, ?, ?, ?)');
         $result = $stmt->execute($saint);
 
         if ($result) {
@@ -155,28 +237,24 @@ class Saint
         return $result;
     }
 
-    public function saveUpdate($id)
+    public function saveUpdate()
     {
-        // $old_photo = $this->getOldPhoto($this->oldPhoto);
-        $oldData = Saint::getById($id);
-
-        $old_photo = $oldData['photo'];
-        
         $updatedSaint = [
             $this->photo,
             $this->name,
             $this->country,
             $this->birthday,
             $this->info,
-            $id
+            $this->status,
+            $this->id
         ];
 
         $pdo = Connection::make();
-        $stmt = $pdo->prepare('UPDATE saints SET photo=?, name=?, country=?, birthday=?, info=? WHERE id=?');
+        $stmt = $pdo->prepare('UPDATE saints SET photo=?, name=?, country=?, birthday=?, info=?, status=? WHERE id=?');
         $result = $stmt->execute($updatedSaint);
 
         if ($result) {
-            handleUploadedFile('edited_photo', $old_photo);
+            handleUploadedFile('photo', $this->old_photo);
         }
         return $result;
     }

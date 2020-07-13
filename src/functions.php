@@ -1,5 +1,7 @@
 <?php
 
+use App\Session;
+
 function dd(...$args)
 {
     echo '<pre>'; var_dump(...$args); exit();
@@ -41,4 +43,18 @@ function h($name, $quotes = ENT_QUOTES)
 function dateFormat($value) {
     $new_date = DateTime::createFromFormat('Y-m-d', $value);
     return $value= $new_date->format('d/m/Y');
+}
+
+function redirectWithMessage($uri, $message) {
+    Session::set('message', $message);
+    redirect($uri);
+}
+
+function old($key) {
+    $old_input = Session::get('old_input');
+
+    if (empty($old_input[$key])) {
+        return null;
+    }
+    return h($old_input[$key]);
 }

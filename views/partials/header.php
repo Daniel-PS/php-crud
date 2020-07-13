@@ -15,14 +15,21 @@
     
     <div class="line">
         <div class="links-line">
-            <a href="<?= BASE_URL ?>/saints">List Saints |</a>
-            <a href="<?= BASE_URL ?>/saints/register">Add a Saint |</a>
-            <a href="<?= BASE_URL ?>/saints/edit?id=1">Update Saint</a>
+        <a href="<?= BASE_URL ?>/saints">Public Saints</a>
+        <?php if (App\Session::get('user')) : ?>
+            <a href="<?= BASE_URL ?>/saints/show">| List Your Saints</a>
+            <a href="<?= BASE_URL ?>/saints/register"> | Add a Saint</a>
+            <a href="<?= BASE_URL ?>/saints/edit?id="> | Update Saint</a>
+        <?php endif; ?>
 
             <div class="links-login">
-                <a class="login-register" href="<?= BASE_URL ?>/saints/register"> Register </a>
-                <a style="cursor: context-menu;"> | </a>
-                <a class="login-register" href="<?= BASE_URL ?>/saints/login"> Login </a>
+                <?php if (! App\Session::get('user')) : ?>
+                    <a class="login-register" href="<?= BASE_URL ?>/saints/signup"> Register </a>
+                    <a style="cursor: context-menu;"> | </a>
+                    <a class="login-register" href="<?= BASE_URL ?>/saints/login"> Login </a>
+                <?php else : ?>
+                    <a class="login-register" href="<?= BASE_URL ?>/saints/logout"> Deslogar </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>

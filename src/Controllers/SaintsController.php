@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Connection;
 use App\Saint;
 use App\Session;
 
@@ -10,11 +9,30 @@ class SaintsController
 {
     public function index()
     {
-        $saints = Saint::getAll();
+        $user_id = Session::get('user');
+        $user_name = (empty($user_id)) ? '' : $user_id->getName();
+        $user_id = (empty($user_id)) ? '' : $user_id->getId();
+        $saints = Saint::getAllPublic('public');
         $message = Session::get('message');
         Session::clear('message');
 
         showView('saints/index.php', [
+            'saints' => $saints,
+            'message' => $message,
+            'user_id' => $user_id,
+            'user_name' => $user_name
+        ]);
+    }
+
+    public function show()
+    {
+        $user = Session::get('user');
+        $saints = Saint::getByUser($user->getId());
+
+        $message = Session::get('message');
+        Session::clear('message');
+
+        showView('saints/show.php', [
             'saints' => $saints,
             'message' => $message,
         ]);
@@ -23,14 +41,13 @@ class SaintsController
     public function create()
     {
         $errors = Session::get('errors');
-        $old_input = Session::get('old_input') ?? [];
+        // $old_input = Session::get('old_input') ?? [];
 
         Session::clear('errors');
-        Session::clear('old_input');
 
         showView('saints/create.php', [
             'errors' => $errors,
-            'old_input' => $old_input
+            // 'old_input' => $old_input
         ]);
     }
 
@@ -42,6 +59,7 @@ class SaintsController
         $saint->setCountry($_POST['country'] ?? '');
         $saint->setBirthday($_POST['birthday'] ?? '');
         $saint->setInfo($_POST['info'] ?? '');
+        $saint->setStatus($_POST['status'] ?? '');
 
 
         // dd($saint->hasValidData());
@@ -58,19 +76,27 @@ class SaintsController
         $saint->save();
         
         Session::set('message', 'Cadastrado com sucesso.');
-        redirect('saints');
+        redirect('saints/show');
     }
 
     public function edit()
     {
-        $id = $_GET['id'];
-        $saint = Saint::getById($id);
+        $saint_id = $_GET['id'];
+        $user = Session::get('user');
+        $saint = Saint::getById($saint_id);
+
+        if (! $saint) {
+            redirectWithMessage('saints/show', 'Santo não existe.');
+        }
+
+        if (! $user || ! $saint->getUserId() == $user->getId()){
+            redirectWithMessage('saints/show', 'Você não tem permissões para editar este Santo.');
+        }
 
         $errors = Session::get('errors');
         $old_input = Session::get('old_input');
 
         Session::clear('errors');
-        Session::clear('old_input');
 
         showView('saints/edit.php', [
             'saint' => $saint,
@@ -82,38 +108,61 @@ class SaintsController
 
     public function update()
     {
-        $updatedSaint = new Saint();
+        $saint_id = $_GET['id'];
+        $saint = Saint::getById($saint_id);
 
-        $id = $_GET['id'];
-        $updatedSaint->setPhoto($_FILES['edited_photo']['name'] ?? '');
-        $updatedSaint->setName($_POST['edited_name'] ?? '');
-        $updatedSaint->setCountry($_POST['edited_country'] ?? '');
-        $updatedSaint->setBirthday($_POST['edited_birthday'] ?? '');
-        $updatedSaint->setInfo($_POST['edited_info'] ?? '');
-        // $updatedSaint->setOldPhoto($id);
+        if (! $saint) {
+            redirectWithMessage('saints/show', 'Santo não existe.');
+        }
+        
+        $user = Session::get('user');
+        
+        if (! $user || ! $saint->getUserId() == $user->getId()){
+            redirectWithMessage('saints/show', 'Você não tem permissões para editar este Santo.');
+        }
 
-        if (! $updatedSaint->hasValidData()) {
-            $errors = $updatedSaint->getErrors();
+        $saint->setOldPhoto($saint->getPhoto());
+        $saint->setPhoto($_FILES['photo']['name'] ?? '');
+        $saint->setName($_POST['name'] ?? '');
+        $saint->setCountry($_POST['country'] ?? '');
+        $saint->setBirthday($_POST['birthday'] ?? '');
+        $saint->setInfo($_POST['info'] ?? '');
+        $saint->setStatus($_POST['status'] ?? '');
+
+        // $saint->setOldPhoto($user);
+        
+
+        if (! $saint->hasValidData()) {
+            $errors = $saint->getErrors();
 
             Session::set('errors', $errors);
             Session::set('old_input', $_POST);
 
-            redirect('saints/edit?id=' . $id);
+            redirect('saints/edit?id=' . $saint_id);
             return;
         }
 
-        $updatedSaint->saveUpdate($id);
+        $saint->saveUpdate();
 
-        Session::set('message', 'Editado com sucesso.');
-        redirect('saints');
+        redirectWithMessage('saints/show', 'Editado com sucesso.');
     }
 
     public function delete()
     {
         $id = $_GET['id'];
+
+        $saint = Saint::getById($id);
+
+        if (! $saint) {
+            redirectWithMessage('saints/show', 'Santo não existe.');
+        }
+
+        $user = Session::get('user');
+
+        if(!$user || $user->getId() != $saint->getUserId()) {
+            redirectWithMessage('saints/show', 'Você não tem permissões para deletar este Santo.');
+        }
         Saint::delete($id);
-        
-        Session::set('message', 'Excluído com sucesso.');
-        redirect('saints');
+        redirectWithMessage('saints', 'Excluído com sucesso.');
     }
 }

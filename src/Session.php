@@ -5,6 +5,14 @@ class Session
 {
     private static $sessionStarted = false;
 
+    public static function startSession()
+    {
+        if (! Session::$sessionStarted) {
+            session_start();
+            Session::$sessionStarted = true;
+        }
+    }
+
     public static function set($key, $value)
     {
         self::startSession();
@@ -25,13 +33,12 @@ class Session
 
         unset($_SESSION[$key]);
     }
-
-    public static function startSession()
+    
+    public static function destroy()
     {
-        if (! Session::$sessionStarted) {
-            session_start();
-            Session::$sessionStarted = true;
-        }
-    }
+        self::startSession();
 
+        $_SESSION = [];
+        session_destroy();
+    }
 }

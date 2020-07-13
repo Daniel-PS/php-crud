@@ -55,6 +55,26 @@ class User
         return $this->errors;
     }
 
+    public function hasValidData()
+    {
+        $this->errors = [];
+        
+        if (empty($this->name))
+        {
+            $this->errors['name'] = 'Preencha este campo.';
+        }
+
+        if(empty($this->email)) {
+            $this->errors['email'] = 'Preencha este campo.';
+        }
+
+        if(empty($this->password)) {
+            $this->errors['password'] = 'Preencha este campo.';
+        }
+
+        return empty($this->errors);
+    }
+
     public static function getByEmail($email)
     {
         $pdo = Connection::make();
@@ -78,6 +98,8 @@ class User
 
     public function save()
     {
+        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+
         $user = [
             $this->name,
             $this->email,
@@ -90,4 +112,5 @@ class User
 
         return $result;
     }
+    
 }
