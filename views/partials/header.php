@@ -19,7 +19,6 @@
         <?php if (App\Session::get('user')) : ?>
             <a href="<?= BASE_URL ?>/saints/show">| List Your Saints</a>
             <a href="<?= BASE_URL ?>/saints/register"> | Add a Saint</a>
-            <a href="<?= BASE_URL ?>/saints/edit?id="> | Update Saint</a>
         <?php endif; ?>
 
             <div class="links-login">

@@ -89,7 +89,7 @@ class SaintsController
             redirectWithMessage('saints/show', 'Santo não existe.');
         }
 
-        if (! $user || ! $saint->getUserId() == $user->getId()){
+        if (! $user || $saint->getUserId() != $user->getId()){
             redirectWithMessage('saints/show', 'Você não tem permissões para editar este Santo.');
         }
 
