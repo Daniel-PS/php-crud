@@ -225,6 +225,20 @@ a {
     font-weight: bold;
 }
 
+.pagination{
+    text-align: center;
+    font-size: 14pt;
+    margin-top: 27px;
+    font-weight: bold;
+}
+
+.page {
+    background-color: antiquewhite;
+    padding: 7px 10px 6px 10px;
+    box-shadow: black 0px 0px 1px 0px;
+
+}
+
 
 /* //////////////// ESTILO DO CREATE //////////////// */
 
@@ -425,3 +439,4 @@ input[type="file"] {
     font-size: 13pt;
     font-weight: bold;
 }
+

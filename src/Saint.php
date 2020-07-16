@@ -3,6 +3,7 @@
 namespace App;
 
 use DateTime;
+use App\Paginator;
 
 class Saint
 {
@@ -19,20 +20,63 @@ class Saint
 
     private $old_photo;
 
-    public static function getAllPublic($public)
+    public static function countByStatus($status)
     {
         $pdo = Connection::make();
 
-        $sql = "SELECT * FROM saints WHERE status=?";
+        $sql = '
+        SELECT count(id) AS total
+            FROM saints 
+        WHERE
+            status = ?
+        LIMIT 1';
+
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$public]);
-        return $stmt->fetchAll();
+        $stmt->execute([$status]);
+        $data = $stmt->fetch();
+
+        if (empty($data)) {
+            return null;
+        }
+
+        return (int) $data['total'];
+    }
+
+    public static function getByStatus($status, $perPage = 10, $page = 1): Paginator
+    {
+        $pdo = Connection::make();
+
+        $total = static::countByStatus($status);
+
+        if ($total === 0) {
+            return new Paginator($page, $perPage, $total, []);
+        }
+
+        // $lastPage = ceil($total / $perPage);
+        // 50 / 10 = 5
+        // 51 / 10 = 6
+
+        $offset = $perPage * ($page - 1);
+
+        // dd($offset, $perPage);
+
+        $sql = "
+        SELECT * 
+            FROM saints 
+        WHERE 
+            status = ?
+        LIMIT {$offset}, {$perPage}";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$status]);
+
+        return new Paginator($page, $perPage, $total, $stmt->fetchAll());
     }
 
     public static function getByUser($user_id)
     {
         $pdo = Connection::make();
-        $sql = "SELECT * FROM saints WHERE user_id=?";
+        $sql = "SELECT * FROM saints WHERE user_id=? ORDER BY FIELD(status, 'private', 'public')";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$user_id]);
         return $stmt->fetchAll();

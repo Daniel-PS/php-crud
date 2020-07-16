@@ -8,8 +8,11 @@
     </div>
 <?php endif; ?>
 
-    <div class="center">
-        <div class="sub-center">
+<div class="center">
+    <div class="sub-center">
+        <?php if ($saintsPaginator->getTotalCount() === 0): ?>
+            <h2>Nothing to show.</h2>
+        <?php else: ?>
             <table>
                 <hr>
                 <tr class="table-rows">
@@ -20,7 +23,7 @@
                     <td>Information</td>
                 </tr>
                 <br>
-                <?php foreach ($saints as $saint): ?>
+                <?php foreach ($saintsPaginator->getItems() as $saint): ?>
                     <tr class="table-rows-values">
                         <td>
                         <div class="tooltip">
@@ -53,7 +56,20 @@
                     </tr>
                 <?php endforeach; ?>
             </table>
-        </div>
+            <div class="pagination">
+                <?php if ($page > 1): ?>
+                    <td><a class="page" href="<?= BASE_URL . '/saints' ?>"><?= h('<<') ?> First</a></td>
+                    <td><a class="page" href="<?= BASE_URL . '/saints?page=' . ($page - 1) ?>"><?= h('<') ?> Previous</a></td>
+                <?php endif ?>
+                <?php if ($page < $saintsPaginator->getLastPage()): ?>
+                    <td><a class="page" href="<?= BASE_URL . '/saints?page=' . ($page + 1) ?>">Next <?= h('>') ?></a></td>
+                    <td><a class="page" href="<?= BASE_URL . '/saints?page=' . $saintsPaginator->getLastPage() ?>">Last <?= h('>>') ?></a></td>
+                <?php endif ?>
+            </div>
+        
+        <?php endif; ?>
     </div>
+</div>
+
 </body>
 </html>

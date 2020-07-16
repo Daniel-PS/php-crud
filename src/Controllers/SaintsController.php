@@ -9,18 +9,22 @@ class SaintsController
 {
     public function index()
     {
+        $page = !empty($_GET['page']) ? ((int) $_GET['page']) : 1;
+        $perPage = 2;
+
         $user_id = Session::get('user');
         $user_name = (empty($user_id)) ? '' : $user_id->getName();
         $user_id = (empty($user_id)) ? '' : $user_id->getId();
-        $saints = Saint::getAllPublic('public');
+        $saintsPaginator = Saint::getByStatus('public', $perPage, $page);
         $message = Session::get('message');
         Session::clear('message');
 
         showView('saints/index.php', [
-            'saints' => $saints,
+            'saintsPaginator' => $saintsPaginator,
             'message' => $message,
             'user_id' => $user_id,
-            'user_name' => $user_name
+            'user_name' => $user_name,
+            'page' => $page,
         ]);
     }
 
@@ -163,6 +167,6 @@ class SaintsController
             redirectWithMessage('saints/show', 'Você não tem permissões para deletar este Santo.');
         }
         Saint::delete($id);
-        redirectWithMessage('saints', 'Excluído com sucesso.');
+        redirectWithMessage('saints/show', 'Excluído com sucesso.');
     }
 }
